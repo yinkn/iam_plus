@@ -1,0 +1,7 @@
+.dashboard_content {
+    margin: 0 auto;
+}
+
+.dashboard_content > h2 {
+    text-align: center
+}
