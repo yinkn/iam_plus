@@ -27,7 +27,7 @@ export default class RegisterPage extends Component {
 					</div>
 					{/* While the form is sending, show the loading indicator,
 						otherwise show "Register" on the submit button */}
-		    	<Form data={formState} dispatch={dispatch} passwordRepeat={showNegative ? 5 : 2} negativePasswordRepeat={showNegative && 5} showNegativePasswordInputs={showNegative} location={location} history={this.props.history} onSubmit={::this._register} btnText={"Register"} currentlySending={currentlySending}/>
+		    	<Form data={formState} dispatch={dispatch} passwordRepeat={showNegative ? 5 : 2} negativePasswordRepeat={showNegative && 5} showNegativePasswordInputs={showNegative} location={location} history={this.props.history} onSubmit={this._register} btnText={"Register"} currentlySending={currentlySending}/>
 				</div>
 			</div>
 		);

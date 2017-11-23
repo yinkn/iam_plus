@@ -15,11 +15,11 @@ cors = CORS(app)
 @app.route('/train', methods=['POST'])
 def train():
     userName = request.json["userName"]
-    print userName
+    print(userName)
 
     # Get Input Features and Calculate Mean Vaule and Standard Deviation
     trainX1input = numpy.array(request.json["dataset"])
-    print trainX1input
+    print(trainX1input)
     #trainX1input = array([
     #       [120, 120, 200, 120, 110, 130, 140, 120, 130, 120],
     #       [200, 150, 250, 180, 150, 180, 180, 200, 200, 180],
@@ -28,7 +28,7 @@ def train():
     trainX1inputsigma = numpy.std(trainX1input,axis=0)
 
     trainX2input = numpy.array(request.json["dataset2"])
-    print trainX2input
+    print(trainX2input)
     #trainX2input = array([
     #       [120, 120, 200, 120, 110, 130, 140, 120, 130, 120],
     #       [200, 150, 250, 180, 150, 180, 180, 200, 200, 180],
@@ -47,9 +47,9 @@ def train():
     Y2 = numpy.zeros(200, dtype=numpy.int)
     trainY = numpy.hstack((Y1, Y2))
 
-    print trainX
-    print trainY
-    print dim
+    print(trainX)
+    print(trainY)
+    print(dim)
 
     # Create Model
     model = Sequential()

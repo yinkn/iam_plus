@@ -97,7 +97,7 @@ class LoginForm extends Component {
     this._emitChange(newState);
   }
 
-  renderPasswordFields = () => {
+  renderPasswordFields(){
     const { passwordRepeat } = this.props;
     const {passwords = []} = this.props.data;
 
