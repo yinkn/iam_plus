@@ -9,8 +9,8 @@
 Start NNServer:
 
 1. install python 3.x
-2. pip install tensorflow
-3. pip install flask
+2. pip install numpy scipy tensorflow keras
+3. pip install flask flask_cors
 4. cd NNServer/src; python app.py
 
 Start front_end:
