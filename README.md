@@ -1,4 +1,4 @@
-# IAM PLUS (iam_plus)
+# IAM+ (iam_plus)
 
 # Introduction
 
@@ -8,8 +8,9 @@ Start NNServer:
 
 1. install python (For windows install python 3.x to support tensorflow, For linux, can still use python 2.x)
 2. pip install tensorflow
-3. pip install flask
-4. cd NNServer/src; python app.py
+3. pip install keras
+4. pip install flask
+5. cd NNServer/src; export FLASK_APP=app.py; flask run --host=0.0.0.0&
 
 Start front_end:
 1. install node.js
