@@ -15,7 +15,7 @@ Start front_end:
 1. install node.js
 2. cd front_end; npm install; npm start
 
-# Reference
+# References
 
 [Python](https://www.python.org/)
 
@@ -28,3 +28,10 @@ Start front_end:
 [Node.js](https://nodejs.org/en/) is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 
 [login-flow](https://github.com/mxstbr/login-flow) This application demonstrates what a React.js based register/login workflow might look like on the Frontend.
+
+[Webpack](https://webpack.js.org/) Webpack is an open-source JavaScript module bundler. Webpack takes modules with dependencies and generates static assets representing those modules.
+
+[React](https://reactjs.org/) A JavaScript library for building user interfaces.
+
+# Resources
+[typingdna](https://typingdna.com/demo-api.html) Typing Biometrics Auth API - Keystroke Dynamics as a Service.
