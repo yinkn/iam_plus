@@ -18,6 +18,8 @@ import sqlite3
 
 import util
 
+import logging
+
 class UserInfo:
     """class to handle user information"""
 
@@ -25,9 +27,11 @@ class UserInfo:
 
     def init_sqlite(self, data_file):
         if os.path.isfile(data_file):
+            logging.info("Connect sqlite {0}".format(data_file))
             self.sqlite_conn = sqlite3.connect(data_file)
         else:
             #if data_file is not existing, the connect will create one
+            logging.info("Create sqlite {0}".format(data_file))
             self.sqlite_conn = sqlite3.connect(data_file)
             cur = self.sqlite_conn.cursor()
             sql = "CREATE TABLE user_info (name_id integer primary key, user_name text, password text, e_mail text, register_time text, key_value text)"
@@ -48,6 +52,7 @@ class UserInfo:
         if self.user_is_existing(user_name.strip()) == True:
             result = False
             description = "User is existing."
+            logging.debug("[{0}] user is created before registration.")
         else:
             now_time = util.time_to_str()
             kv_str = util.dict_to_str(key_value)
@@ -58,16 +63,19 @@ class UserInfo:
             self.sqlite_conn.commit()
             result = True
             description = "User is created."
+            logging.info("[{0}] user is created.")
        
         return result, description
 
     def user_login(self, user_name, password):
         cur = self.sqlite_conn.cursor()
-        user = cur.execute('select user_name from user_info where user_name=? and password=?', (user_name, password))
+        cur.execute('select user_name from user_info where user_name=? and password=?', (user_name, password))
+        user = cur.fetchone() 
         if user is None:
             return False
         else:
             return True
+            logging.info("[{0}] user login.".format(user_name))
 
     def user_typing_record(self, user_name, typing, key_value={}):
         result = False
@@ -97,7 +105,9 @@ class UserInfo:
 
     def user_is_existing(self, user_name):
         cur = self.sqlite_conn.cursor()
-        user = cur.execute('select user_name from user_info where user_name=?', (user_name, ))
+        cur.execute('select user_name from user_info where user_name=?', (user_name, ))
+        user = cur.fetchone()
+        #logging.debug("user_is_existing: {0}".format(user))
         if user is None:
             return False
         else:

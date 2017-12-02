@@ -33,5 +33,7 @@ Start front_end:
 
 [React](https://reactjs.org/) A JavaScript library for building user interfaces.
 
+[sqlite](https://www.sqlite.org/) SQLite is an in-process library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine. The code for SQLite is in the public domain and is thus free for use for any purpose, commercial or private. 
+
 # Resources
 [typingdna](https://typingdna.com/demo-api.html) Typing Biometrics Auth API - Keystroke Dynamics as a Service.
