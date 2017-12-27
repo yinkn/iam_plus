@@ -39,7 +39,8 @@ import fetch from 'isomorphic-fetch';
  * @param  {string} password The password of the user to be logged in
  */
 
-const baseUrl = 'http://10.175.186.34:5000';
+//const baseUrl = 'http://10.175.186.34:5000';
+const baseUrl = 'http://127.0.0.1:5000';
 
 export function login(username, password, interval) {
   return (dispatch) => {
@@ -69,7 +70,7 @@ export function login(username, password, interval) {
       }
       // Use auth.js to fake a request
       
-      auth.login(username, hash, async (success, err) => {
+      //auth.login(username, hash, async (success, err) => {
         if (success === true) {
           const reponse = fetch(`${baseUrl}/predict`, {
             method: "POST",
@@ -120,7 +121,7 @@ export function login(username, password, interval) {
               return;
           }
         }
-      });
+      //});
     });
   }
 }
@@ -196,7 +197,7 @@ export function register({username, passwords = [], intervals = [], passwords1 =
         return;
       }
       // Use auth.js to fake a request
-      auth.register(username, hash, (success, err) => {
+      //auth.register(username, hash, (success, err) => {
         const reponse = fetch(`${baseUrl}/train`, {
           method: "POST",
           headers: {
@@ -232,7 +233,7 @@ export function register({username, passwords = [], intervals = [], passwords1 =
           dispatch(sendingRequest(false));
           dispatch(setAuthState(false));
         });       
-      });
+      //});
     });
   }
 }
