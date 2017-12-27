@@ -72,13 +72,14 @@ export function login(username, password, interval) {
       
       //auth.login(username, hash, async (success, err) => {
         if (success === true) {
-          const reponse = fetch(`${baseUrl}/predict`, {
+          const reponse = fetch(`${baseUrl}/login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
               userName: username,
+              password: hash,
               dataset: [ interval],
             })
           }).then(response => {
@@ -198,13 +199,14 @@ export function register({username, passwords = [], intervals = [], passwords1 =
       }
       // Use auth.js to fake a request
       //auth.register(username, hash, (success, err) => {
-        const reponse = fetch(`${baseUrl}/train`, {
+        const reponse = fetch(`${baseUrl}/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             userName: username,
+            password: hash,
             dataset: intervals,
             dataset2: intervals1,
           }),

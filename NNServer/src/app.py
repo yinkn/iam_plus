@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 cors = CORS(app)
 
-@app.route('/train', methods=['POST'])
+@app.route('/register', methods=['POST'])
 def train():
     userName = request.json["userName"]
     print(userName)
@@ -75,7 +75,7 @@ def train():
     return '', 200
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/login', methods=['POST'])
 def predict():
     userName = request.json["userName"]
 
