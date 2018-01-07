@@ -27,21 +27,20 @@ class FlaskAppTest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_register(self):
+    def test_register_login(self):
         logging.debug("test_login:")
         response = self.client.post('/register', 
-        data=json.dumps({"userName":"DEMO1","dataset":[[200,27,102,80,-36,80,579,66,21,61,208,71,-110],[200,27,102,80,-36,80,579,66,21,61,208,71,-110]]})
+        data=json.dumps({"userName":"DEMO1", "password":"12345","dataset":[[200,27,102,80,-36,80,579,66,21,61,208,71,-110],[200,27,102,80,-36,80,579,66,21,61,208,71,-110]]})
+        , content_type='application/json'
+        , follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        logging.debug("test_login:")
+        response = self.client.post('/login', 
+        data=json.dumps({"userName":"DEMO1", "password":"12345","dataset":[[200,27,102,80,-36,80,579,66,21,61,208,71,-110],[200,27,102,80,-36,80,579,66,21,61,208,71,-110]]})
         , content_type='application/json'
         , follow_redirects=True)
         self.assertEqual(response.status_code, 200)
     
-    def test_login(self):
-        logging.debug("test_login:")
-        response = self.client.post('/login', 
-        data=json.dumps({"userName":"DEMO1","dataset":[[200,27,102,80,-36,80,579,66,21,61,208,71,-110],[200,27,102,80,-36,80,579,66,21,61,208,71,-110]]})
-        , content_type='application/json'
-        , follow_redirects=True)
-        self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     app.init_log()
