@@ -25,6 +25,12 @@ class UserInfo:
 
     sqlite_conn = None
 
+    def is_connected(self):
+        if self.sqlite_conn is None:
+            return False
+        else:
+            return True
+
     def init_sqlite(self, data_file):
         if os.path.isfile(data_file):
             logging.info("Connect sqlite {0}".format(data_file))
@@ -44,6 +50,7 @@ class UserInfo:
     def exit_sqlite(self):
         if self.sqlite_conn != None:
             self.sqlite_conn.close()
+            self.sqlite_conn = None
 
     def user_register(self, user_name, password, e_mail, key_value={}):
         result = False
@@ -63,7 +70,7 @@ class UserInfo:
             self.sqlite_conn.commit()
             result = True
             description = "User is created."
-            logging.info("[{0}] user is created.")
+            logging.info("[{0}] user is created.".format(user_name))
        
         return result, description
 
