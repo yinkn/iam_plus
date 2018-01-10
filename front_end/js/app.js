@@ -16,17 +16,17 @@ import 'file?name=[name].[ext]!../favicon.ico';
 import 'file?name=[name].[ext]!../favicon.png';
 
 //Check for ServiceWorker support before trying to install it
-if ('serviceWorker' in navigator) {
-    // Install ServiceWorker
-  navigator.serviceWorker.register('/serviceworker.js').then(() => {
-  }).catch((err) => {
-    // Installation failed
-    console.log('ServiceWorker registration failed, error:', err);
-  });
-} else {
-  // No ServiceWorker Support
-  console.log('ServiceWorker is not supported in this browser');
-}
+// if ('serviceWorker' in navigator) {
+//     // Install ServiceWorker
+//   navigator.serviceWorker.register('/serviceworker.js').then(() => {
+//   }).catch((err) => {
+//     // Installation failed
+//     console.log('ServiceWorker registration failed, error:', err);
+//   });
+// } else {
+//   // No ServiceWorker Support
+//   console.log('ServiceWorker is not supported in this browser');
+// }
 
 // Import all the third party stuff
 import React from 'react';
