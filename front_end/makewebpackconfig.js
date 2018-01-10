@@ -54,8 +54,8 @@ module.exports = function(options) {
     cssLoaders = ['style-loader', 'css-loader', 'postcss-loader'];
     // Only plugin is the hot module replacement plugin
     plugins = [
-      new webpack.HotModuleReplacementPlugin(), // Make hot loading work
-      new AppCachePlugin()
+      new webpack.HotModuleReplacementPlugin() // Make hot loading work
+      // new AppCachePlugin()
     ]
   }
 
@@ -69,7 +69,7 @@ module.exports = function(options) {
     module: {
       loaders: [{
           test: /\.js$/, // Transform all .js files required somewhere within an entry point...
-          loader: 'babel', // ...with the specified loaders...
+          loaders: ['react-hot', 'babel'], // ...with the specified loaders...
           exclude: path.join(__dirname, '/node_modules/') // ...except for the node_modules folder.
         }, {
           test:   /\.css$/, // Transform all .css files required somewhere within an entry point...
