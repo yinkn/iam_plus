@@ -93,19 +93,30 @@ function checkAuth(nextState, replaceState) {
 
 // Mostly boilerplate, except for the Routes. These are the pages you can go to,
 // which are all wrapped in the App component, which contains the navigation etc
-ReactDOM.render(
-  <Provider store={store}>
-    <Router history={browserHistory}>
-      <Route component={App}>
-        <Route path="/" component={HomePage} />
-        <Route onEnter={checkAuth}>
-          <Route path="/login" component={LoginPage} />
-          <Route path="/register" component={RegisterPage} />
-          <Route path="/dashboard" component={Dashboard} />
+const render = Component => (
+  ReactDOM.render(
+    <Provider store={store}>
+      <Router history={browserHistory}>
+        <Route component={Component}>
+          <Route path="/" component={HomePage} />
+          <Route onEnter={checkAuth}>
+            <Route path="/login" component={LoginPage} />
+            <Route path="/register" component={RegisterPage} />
+            <Route path="/dashboard" component={Dashboard} />
+          </Route>
+          <Route path="*" component={NotFound} />
         </Route>
-        <Route path="*" component={NotFound} />
-      </Route>
-    </Router>
-  </Provider>,
-  document.getElementById('app')
+      </Router>
+    </Provider>,
+    document.getElementById('app')
+  )
 );
+
+render(App);
+
+// Webpack Hot Module Replacement API
+if (module.hot) {
+  module.hot.accept('./components/App.react', () => {
+    render(App);
+  })
+}
