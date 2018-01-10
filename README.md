@@ -31,6 +31,8 @@ Start front_end:
 
 [Keras](https://keras.io/) is a high-level neural networks API, written in Python and capable of running on top of TensorFlow, CNTK, or Theano. 
 
+[h5py](http://www.h5py.org/) package is a Pythonic interface to the HDF5 binary data format.
+
 [Node.js](https://nodejs.org/en/) is a JavaScript runtime built on Chrome's V8 JavaScript engine. Node.js uses an event-driven, non-blocking I/O model that makes it lightweight and efficient. Node.js' package ecosystem, npm, is the largest ecosystem of open source libraries in the world.
 
 [login-flow](https://github.com/mxstbr/login-flow) This application demonstrates what a React.js based register/login workflow might look like on the Frontend.
