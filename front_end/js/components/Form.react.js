@@ -25,7 +25,7 @@ class LoginForm extends Component {
     if (!this.negativePasswordFieldRecords) {
       this.negativePasswordFieldRecords = [];
     }
-    
+
     if (isNegative) {
       if (!this.negativePasswordFieldRecords[index]) {
         this.negativePasswordFieldRecords[index] = observe.interval(evt.target);
@@ -42,25 +42,25 @@ class LoginForm extends Component {
   }
 
   isPrintable(keycode) {
-    const valid = 
-        (keycode > 47 && keycode < 58)   || // number keys
-        keycode == 32 || keycode == 13   || // spacebar & return key(s) (if you want to allow carriage returns)
-        (keycode > 64 && keycode < 91)   || // letter keys
-        (keycode > 95 && keycode < 112)  || // numpad keys
-        (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-        (keycode > 218 && keycode < 223);   // [\]' (in order)
+    const valid =
+      (keycode > 47 && keycode < 58) || // number keys
+      keycode == 32 || keycode == 13 || // spacebar & return key(s) (if you want to allow carriage returns)
+      (keycode > 64 && keycode < 91) || // letter keys
+      (keycode > 95 && keycode < 112) || // numpad keys
+      (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+      (keycode > 218 && keycode < 223);   // [\]' (in order)
 
     return valid;
   }
 
   _updateRecord(index) {
-    let keysPressedRecords  = this.passwordFieldRecords[index] || [];
+    let keysPressedRecords = this.passwordFieldRecords[index] || [];
     keysPressedRecords = R.filter(x => this.isPrintable(x.keyCode), keysPressedRecords);
 
     const sortedRecords = R.sortBy(R.prop("start"))(keysPressedRecords);
 
     const intervals = [];
-    for (let i = 1; i < R.length(sortedRecords); i ++) {
+    for (let i = 1; i < R.length(sortedRecords); i++) {
       intervals.push(sortedRecords[i].start - sortedRecords[i - 1].end);
     }
 
@@ -69,20 +69,20 @@ class LoginForm extends Component {
     const newIntervals = R.clone(this.props.data.intervals) || [];
     newIntervals[index] = intervals;
     var newState = this._mergeWithCurrentState({
-      intervals: newIntervals 
+      intervals: newIntervals
     });
 
     this._emitChange(newState);
   }
 
   _updateRecordNegative(index) {
-    let keysPressedRecords  = this.negativePasswordFieldRecords[index] || [];
+    let keysPressedRecords = this.negativePasswordFieldRecords[index] || [];
     keysPressedRecords = R.filter(x => this.isPrintable(x.keyCode), keysPressedRecords);
 
     const sortedRecords = R.sortBy(R.prop("start"))(keysPressedRecords);
 
     const intervals = [];
-    for (let i = 1; i < R.length(sortedRecords); i ++) {
+    for (let i = 1; i < R.length(sortedRecords); i++) {
       intervals.push(sortedRecords[i].start - sortedRecords[i - 1].end);
     }
 
@@ -91,47 +91,61 @@ class LoginForm extends Component {
     const newIntervals = R.clone(this.props.data.intervals1) || [];
     newIntervals[index] = intervals;
     var newState = this._mergeWithCurrentState({
-      intervals1: newIntervals 
+      intervals1: newIntervals
     });
 
     this._emitChange(newState);
   }
 
-  renderPasswordFields(){
+  renderPasswordFields() {
     const { passwordRepeat } = this.props;
-    const {passwords = []} = this.props.data;
+    const { passwords = [] } = this.props.data;
+    const i = 0
+    return <input className="form__field-input"
+      onFocus={this._recordKeyInterval.bind(this, i, false)}
+      onKeyUp={this._updateRecord.bind(this, i)}
+      id={"password_" + i}
+      type={this.props.hidePassword ? "password" : "text"}
+      value={passwords[i]}
+      placeholder=""
+      onChange={this._changePassword.bind(this, i, false)} />
+  }
 
-    const passwordFields = [];
-    for (let i = 0; i < passwordRepeat + 1; i ++) {
-      passwordFields.push(      
-        <input className="form__field-input" 
+  renderRepeatPasswordFields() {
+    const { passwordRepeat } = this.props;
+    const { passwords = [] } = this.props.data;
+
+    const repeatPasswordFields = [];
+    for (let i = 1; i < passwordRepeat + 1; i++) {
+      repeatPasswordFields.push(
+        <input className="form__field-input"
           onFocus={this._recordKeyInterval.bind(this, i, false)}
           onKeyUp={this._updateRecord.bind(this, i)}
           id={"password_" + i}
-          type={this.props.hidePassword? "password":"text"}
+          type={this.props.hidePassword ? "password" : "text"}
           value={passwords[i]}
-          placeholder="" 
+          placeholder=""
           onChange={this._changePassword.bind(this, i, false)} />
       );
     }
 
-    return passwordFields;
+    return repeatPasswordFields;
   }
 
   renderNegativePasswordFields() {
     const { negativePasswordRepeat } = this.props;
-    const {negativePasswords = []} = this.props.data;
+    const { negativePasswords = [] } = this.props.data;
 
     const negativePasswordFields = [];
-    for (let i = 0; i < negativePasswordRepeat + 1; i ++) {
-      negativePasswordFields.push(      
-        <input className="form__field-input" 
+    for (let i = 0; i < negativePasswordRepeat + 1; i++) {
+      negativePasswordFields.push(
+        <input className="form__field-input"
           onFocus={this._recordKeyInterval.bind(this, i, true)}
           onKeyUp={this._updateRecordNegative.bind(this, i)}
           id={"ngetive_password_" + i}
           type="text"
           value={negativePasswordFields[i]}
-          placeholder="" 
+          placeholder=""
           onChange={this._changePassword.bind(this, i, true)} />
       );
     }
@@ -140,7 +154,7 @@ class LoginForm extends Component {
   }
 
   render() {
-    return(
+    return (
       <form className="form" onSubmit={this._onSubmit.bind(this)}>
         <ErrorMessage />
         <div className="form__field-wrapper">
@@ -152,18 +166,24 @@ class LoginForm extends Component {
             <div><span className="form__field-label">Password</span></div>
             {this.renderPasswordFields()}
           </div>
-          {!!this.props.showNegativePasswordInputs &&
+        </div>
+        <div className="form__field-wrapper">
           <div className="form__password-wrapper">
-            <div><span className="form__field-label">Negative</span></div>
-            {this.renderNegativePasswordFields()}
-          </div>}
+            <div><span className="form__field-label">Repeat Password</span></div>
+            {this.renderRepeatPasswordFields()}
+          </div>
+          {!!this.props.showNegativePasswordInputs &&
+            <div className="form__password-wrapper">
+              <div><span className="form__field-label">Negative</span></div>
+              {this.renderNegativePasswordFields()}
+            </div>}
         </div>
         <div className="form__submit-btn-wrapper">
           {this.props.currentlySending ? (
             <LoadingButton />
           ) : (
-            <button className="form__submit-btn" type="submit">{this.props.btnText}</button>
-          )}
+              <button className="form__submit-btn" type="submit">{this.props.btnText}</button>
+            )}
         </div>
       </form>
     );
@@ -196,8 +216,8 @@ class LoginForm extends Component {
     var changed = isNegative ? {
       passwords1: newPasswords
     } : {
-      passwords: newPasswords
-    }
+        passwords: newPasswords
+      }
     var newState = this._mergeWithCurrentState(changed);
 
     this._emitChange(newState);
