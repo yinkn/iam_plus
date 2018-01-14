@@ -167,17 +167,18 @@ class LoginForm extends Component {
             {this.renderPasswordFields()}
           </div>
         </div>
-        <div className="form__field-wrapper">
-          <div className="form__password-wrapper">
-            <div><span className="form__field-label">Repeat Password</span></div>
-            {this.renderRepeatPasswordFields()}
-          </div>
-          {!!this.props.showNegativePasswordInputs &&
+        {!!this.props.passwordRepeat > 0 &&
+          <div className="form__field-wrapper">
             <div className="form__password-wrapper">
-              <div><span className="form__field-label">Negative</span></div>
-              {this.renderNegativePasswordFields()}
-            </div>}
-        </div>
+              <div><span className="form__field-label">Repeat Password</span></div>
+              {this.renderRepeatPasswordFields()}
+            </div>
+            {!!this.props.showNegativePasswordInputs &&
+              <div className="form__password-wrapper">
+                <div><span className="form__field-label">Negative</span></div>
+                {this.renderNegativePasswordFields()}
+              </div>}
+          </div>}
         <div className="form__submit-btn-wrapper">
           {this.props.currentlySending ? (
             <LoadingButton />
