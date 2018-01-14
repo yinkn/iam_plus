@@ -30,7 +30,8 @@ export default class RegisterPage extends Component {
 					<Form data={formState} dispatch={dispatch} passwordRepeat={showNegative ? 5 : 2} 
 					negativePasswordRepeat={showNegative && 5} 
 					showNegativePasswordInputs={showNegative} location={location} 
-					history={this.props.history} onSubmit={this._register.bind(this)} btnText={"Register"} currentlySending={currentlySending}/>
+					history={this.props.history} onSubmit={this._register.bind(this)} btnText={"Register"} 
+					currentlySending={currentlySending} hidePassword={true} />
 				</div>
 			</div>
 		);
