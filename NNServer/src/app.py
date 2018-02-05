@@ -33,6 +33,8 @@ def register():
     user_info_db = get_user_info_db()
     if user_info_db.user_is_existing(userName) is False:
         user_info_db.user_register(userName, password, "", {})
+        for type_record in request.json["dataset"]:
+            user_info_db.user_typing_record(userName, str(type_record))
     else:
         logging.info("register: {0} is exist.".format(userName))
     return '', 200
@@ -50,6 +52,8 @@ def login():
 
     response = {"rate": 100}
     if result is True:
+        for type_record in request.json["dataset"]:
+            user_info_db.user_typing_record(userName, str(type_record))
         return jsonify(response), 200
     else:
         return jsonify(response), 404
