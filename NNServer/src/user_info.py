@@ -56,21 +56,26 @@ class UserInfo:
         result = False
         description = "Unknow reason."
 
-        if self.user_is_existing(user_name.strip()) == True:
+        if str(user_name).strip() == "":
+            logging.info("username is empty.")
             result = False
-            description = "User is existing."
-            logging.debug("[{0}] user is created before registration.")
+            description = "username is empty."
         else:
-            now_time = util.time_to_str()
-            kv_str = util.dict_to_str(key_value)
-            cur = self.sqlite_conn.cursor()
-            cur.execute("insert into user_info(user_name, password, e_mail, register_time, key_value) values (?, ?, ?, ?, ?)"
-                , (user_name.strip(), password.strip(), e_mail.strip(), now_time, kv_str))
-            #commit data change
-            self.sqlite_conn.commit()
-            result = True
-            description = "User is created."
-            logging.info("[{0}] user is created.".format(user_name))
+            if self.user_is_existing(user_name.strip()) == True:
+                result = False
+                description = "User is existing."
+                logging.debug("[{0}] user is created before registration.")
+            else:
+                now_time = util.time_to_str()
+                kv_str = util.dict_to_str(key_value)
+                cur = self.sqlite_conn.cursor()
+                cur.execute("insert into user_info(user_name, password, e_mail, register_time, key_value) values (?, ?, ?, ?, ?)"
+                    , (user_name.strip(), password.strip(), e_mail.strip(), now_time, kv_str))
+                #commit data change
+                self.sqlite_conn.commit()
+                result = True
+                description = "User is created."
+                logging.info("[{0}] user is created.".format(user_name))
        
         return result, description
 
@@ -81,8 +86,9 @@ class UserInfo:
         if user is None:
             return False
         else:
-            return True
             logging.info("[{0}] user login.".format(user_name))
+            return True
+            
 
     def user_typing_record(self, user_name, typing, key_value={}):
         result = False
