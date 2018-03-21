@@ -15,10 +15,12 @@ CREATE TABLE user_record (user_name user_name, record_time text, typing_record t
 """
 import os
 import sqlite3
+import logging
+import ast
 
 import util
 
-import logging
+
 
 class UserInfo:
     """class to handle user information"""
@@ -56,21 +58,26 @@ class UserInfo:
         result = False
         description = "Unknow reason."
 
-        if self.user_is_existing(user_name.strip()) == True:
+        if str(user_name).strip() == "":
+            logging.info("username is empty.")
             result = False
-            description = "User is existing."
-            logging.debug("[{0}] user is created before registration.")
+            description = "username is empty."
         else:
-            now_time = util.time_to_str()
-            kv_str = util.dict_to_str(key_value)
-            cur = self.sqlite_conn.cursor()
-            cur.execute("insert into user_info(user_name, password, e_mail, register_time, key_value) values (?, ?, ?, ?, ?)"
-                , (user_name.strip(), password.strip(), e_mail.strip(), now_time, kv_str))
-            #commit data change
-            self.sqlite_conn.commit()
-            result = True
-            description = "User is created."
-            logging.info("[{0}] user is created.".format(user_name))
+            if self.user_is_existing(user_name.strip()) == True:
+                result = False
+                description = "User is existing."
+                logging.debug("[{0}] user is created before registration.")
+            else:
+                now_time = util.time_to_str()
+                kv_str = util.dict_to_str(key_value)
+                cur = self.sqlite_conn.cursor()
+                cur.execute("insert into user_info(user_name, password, e_mail, register_time, key_value) values (?, ?, ?, ?, ?)"
+                    , (user_name.strip(), password.strip(), e_mail.strip(), now_time, kv_str))
+                #commit data change
+                self.sqlite_conn.commit()
+                result = True
+                description = "User is created."
+                logging.info("[{0}] user is created.".format(user_name))
        
         return result, description
 
@@ -81,8 +88,9 @@ class UserInfo:
         if user is None:
             return False
         else:
-            return True
             logging.info("[{0}] user login.".format(user_name))
+            return True
+            
 
     def user_typing_record(self, user_name, typing, key_value={}):
         result = False
@@ -92,7 +100,7 @@ class UserInfo:
             now_time = util.time_to_str()
             kv_str = util.dict_to_str(key_value)
             cur = self.sqlite_conn.cursor()
-            cur.execute("insert into user_record(user_name, record_time, record_time, key_value) values (?, ?, ?, ?)"
+            cur.execute("insert into user_record(user_name, typing_record, record_time, key_value) values (?, ?, ?, ?)"
                 , (user_name.strip(), typing.strip(), now_time, kv_str))
             #commit data change
             self.sqlite_conn.commit()
@@ -103,6 +111,17 @@ class UserInfo:
             description = "User is not existing."
        
         return result, description
+
+    def get_typing_record_with_kv(self, user_name, key_value={}, max_record=10):
+        typing_record_list = []
+        cur = self.sqlite_conn.cursor()
+        kv_str = util.dict_to_str(key_value)
+        for row in cur.execute( 'select typing_record, key_value from user_record where user_name=? ' \
+            , (user_name, )):
+            typing_record_list.append(ast.literal_eval(row[0]))
+            if len(typing_record_list) >= max_record and row[1].find(kv_str)>=0:
+                return typing_record_list
+        return typing_record_list
 
     def user_logout(self, user_name):
         pass

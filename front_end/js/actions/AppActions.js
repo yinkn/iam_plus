@@ -71,7 +71,8 @@ export function login(username, password, interval) {
       // Use auth.js to fake a request
       
       //auth.login(username, hash, async (success, err) => {
-        if (success === true) {
+        var success = true;
+        if (success == true) {
           const reponse = fetch(`${baseUrl}/login`, {
             method: "POST",
             headers: {

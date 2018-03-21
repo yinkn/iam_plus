@@ -1,77 +1,97 @@
+import os
+
 import numpy
 from numpy import *
+
 from keras.models import Sequential, load_model
 from keras.layers import Dense
 
+class KerasModelMgr:
+    """class to handle user information"""
 
-def train(userName, trainX1input, trainX2input):
-    """
-    trainX1input: positive input
-    trainX2input: 
-    """
-    # userName = request.json["userName"]
-    # print(userName)
+    def __init__(self):
+        self.model_map = {}
 
-    # Get Input Features and Calculate Mean Vaule and Standard Deviation
-    # trainX1input = numpy.array(request.json["dataset"])
-    print(trainX1input)
-    #trainX1input = array([
-    #       [120, 120, 200, 120, 110, 130, 140, 120, 130, 120],
-    #       [200, 150, 250, 180, 150, 180, 180, 200, 200, 180],
-    #       [220, 190, 300, 220, 180, 210, 220, 280, 270, 240]])
-    trainX1inputmean  = numpy.mean(trainX1input,axis=0)
-    trainX1inputsigma = numpy.std(trainX1input,axis=0)
+    def train(self, userName, trainX1input, trainX2input):
+        """
+        trainX1input: positive input
+        trainX2input: negative input
+        """
+        # userName = request.json["userName"]
+        # print(userName)
 
-    #trainX2input = numpy.array(request.json["dataset2"])
-    print(trainX2input)
-    #trainX2input = array([
-    #       [120, 120, 200, 120, 110, 130, 140, 120, 130, 120],
-    #       [200, 150, 250, 180, 150, 180, 180, 200, 200, 180],
-    #       [220, 190, 300, 220, 180, 210, 220, 280, 270, 240]])
-    trainX2inputmean  = numpy.mean(trainX2input,axis=0)
-    trainX2inputsigma = numpy.std(trainX2input,axis=0)
+        # Get Input Features and Calculate Mean Vaule and Standard Deviation
+        # trainX1input = numpy.array(request.json["dataset"])
+        print(trainX1input)
+        #trainX1input = array([
+        #       [120, 120, 200, 120, 110, 130, 140, 120, 130, 120],
+        #       [200, 150, 250, 180, 150, 180, 180, 200, 200, 180],
+        #       [220, 190, 300, 220, 180, 210, 220, 280, 270, 240]])
+        trainX1input = array(trainX1input)
+        trainX2input = array(trainX2input)
 
-    dim = trainX1input.shape[1]
+        trainX1inputmean  = numpy.mean(trainX1input,axis=0)
+        trainX1inputsigma = numpy.std(trainX1input,axis=0)
 
-    # Generate Training Set
-    X1 = numpy.random.normal(trainX1inputmean, trainX1inputsigma, (100, dim))
-    X2 = numpy.random.normal(trainX2inputmean, trainX2inputsigma, (200, dim))
-    trainX = numpy.vstack((X1, X2))
+        #trainX2input = numpy.array(request.json["dataset2"])
+        print(trainX2input)
+        #trainX2input = array([
+        #       [120, 120, 200, 120, 110, 130, 140, 120, 130, 120],
+        #       [200, 150, 250, 180, 150, 180, 180, 200, 200, 180],
+        #       [220, 190, 300, 220, 180, 210, 220, 280, 270, 240]])
+        trainX2inputmean  = numpy.mean(trainX2input,axis=0)
+        trainX2inputsigma = numpy.std(trainX2input,axis=0)
 
-    Y1 = numpy.ones(100, dtype=numpy.int)
-    Y2 = numpy.zeros(200, dtype=numpy.int)
-    trainY = numpy.hstack((Y1, Y2))
+        dim = trainX1input.shape[1]
 
-    print(trainX)
-    print(trainY)
-    print(dim)
+        # Generate Training Set
+        X1 = numpy.random.normal(trainX1inputmean, trainX1inputsigma, (100, dim))
+        X2 = numpy.random.normal(trainX2inputmean, trainX2inputsigma, (200, dim))
+        trainX = numpy.vstack((X1, X2))
 
-    # Create Model
-    model = Sequential()
-    model.add(Dense(dim, input_dim=dim, kernel_initializer='normal', activation='relu'))
-    model.add(Dense(1, kernel_initializer='normal', activation='sigmoid'))
+        Y1 = numpy.ones(100, dtype=numpy.int)
+        Y2 = numpy.zeros(200, dtype=numpy.int)
+        trainY = numpy.hstack((Y1, Y2))
 
-    # Compile Model
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+        print(trainX)
+        print(trainY)
+        print(dim)
 
-    # Fit Model
-    model.fit(trainX, trainY, epochs=1000, batch_size=10)
+        # Create Model
+        model = Sequential()
+        model.add(Dense(dim, input_dim=dim, kernel_initializer='normal', activation='relu'))
+        model.add(Dense(1, kernel_initializer='normal', activation='sigmoid'))
 
-    # Evaluate Model
-    scores = model.evaluate(trainX, trainY)
+        # Compile Model
+        model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    print("   ")
-    print("   ")
-    print("   ====== train =======   ")
-    print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+        # Fit Model
+        model.fit(trainX, trainY, epochs=1000, batch_size=10)
 
-    model.save('%s.h5' % str(userName))
+        # Evaluate Model
+        scores = model.evaluate(trainX, trainY)
+
+        print("   ")
+        print("   ")
+        print("   ====== train =======   ")
+        print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+
+        model.save('%s.h5' % str(userName))
 
 
-def predict(userName, testX):
-    #userName = request.json["userName"]
+    def predict(self, userName, testX):
+        #userName = request.json["userName"]
+        if userName not in self.model_map:
+            model_file = "%s.h5" % str(userName)
+            if os.path.isfile(model_file):
+                model = load_model(model_file)
+                self.model_map[userName] = model
+        if userName in self.model_map:
+            model = self.model_map[userName]
 
-    model = load_model("%s.h5" % str(userName))
-
-    #testX = numpy.array(request.json["dataset"])
-    predictions = model.predict(testX)
+            #testX = numpy.array(request.json["dataset"])
+            testX = array(testX)
+            predictions = model.predict(testX)
+            return predictions.item(0)
+        else:
+            return 0
