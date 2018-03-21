@@ -1,5 +1,8 @@
+import os
+
 import numpy
 from numpy import *
+
 from keras.models import Sequential, load_model
 from keras.layers import Dense
 
@@ -79,12 +82,16 @@ class KerasModelMgr:
     def predict(self, userName, testX):
         #userName = request.json["userName"]
         if userName not in self.model_map:
-             model = load_model("%s.h5" % str(userName))
-             self.model_map[userName] = model
+            model_file = "%s.h5" % str(userName)
+            if os.path.isfile(model_file):
+                model = load_model(model_file)
+                self.model_map[userName] = model
+        if userName in self.model_map:
+            model = self.model_map[userName]
 
-        model = self.model_map[userName]
-
-        #testX = numpy.array(request.json["dataset"])
-        testX = array(testX)
-        predictions = model.predict(testX)
-        return predictions.item(0)
+            #testX = numpy.array(request.json["dataset"])
+            testX = array(testX)
+            predictions = model.predict(testX)
+            return predictions.item(0)
+        else:
+            return 0

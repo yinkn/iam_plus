@@ -54,10 +54,13 @@ def login():
     user_info_db = get_user_info_db()
     result = user_info_db.user_login(userName, password)
 
-    response = {"rate": 100}
     if result is True:
+        testX = []
         for type_record in request.json["dataset"]:
-            user_info_db.user_typing_record(userName, str(type_record), {'time':int(time.time())})
+            user_info_db.user_typing_record(userName, str(type_record), {'time':int(time.time())}) 
+            testX.append(type_record)       
+        rate = keras_model_mgr.predict(userName, testX)
+        response = {"rate": rate}
         return jsonify(response), 200
     else:
         return jsonify(response), 404
@@ -75,7 +78,8 @@ def train():
     if result is True:
         record_list_1 = user_info_db.get_typing_record_with_kv(userName,{'tag':1})
         record_list_2 = user_info_db.get_typing_record_with_kv(userName,{'tag':0})
-        keras_model_mgr.prepare_and_train(userName, record_list_1, record_list_2)
+        keras_model_mgr.train(userName, record_list_1, record_list_2)
+        return "Training completed.", 200
     else:
         return "Can't login for training", 404
 
