@@ -15,10 +15,12 @@ CREATE TABLE user_record (user_name user_name, record_time text, typing_record t
 """
 import os
 import sqlite3
+import logging
+import ast
 
 import util
 
-import logging
+
 
 class UserInfo:
     """class to handle user information"""
@@ -98,7 +100,7 @@ class UserInfo:
             now_time = util.time_to_str()
             kv_str = util.dict_to_str(key_value)
             cur = self.sqlite_conn.cursor()
-            cur.execute("insert into user_record(user_name, record_time, record_time, key_value) values (?, ?, ?, ?)"
+            cur.execute("insert into user_record(user_name, typing_record, record_time, key_value) values (?, ?, ?, ?)"
                 , (user_name.strip(), typing.strip(), now_time, kv_str))
             #commit data change
             self.sqlite_conn.commit()
@@ -109,6 +111,17 @@ class UserInfo:
             description = "User is not existing."
        
         return result, description
+
+    def get_typing_record_with_kv(self, user_name, key_value={}, max_record=10):
+        typing_record_list = []
+        cur = self.sqlite_conn.cursor()
+        kv_str = util.dict_to_str(key_value)
+        for row in cur.execute( 'select typing_record, key_value from user_record where user_name=? ' \
+            , (user_name, )):
+            typing_record_list.append(ast.literal_eval(row[0]))
+            if len(typing_record_list) >= max_record and row[1].find(kv_str)>=0:
+                return typing_record_list
+        return typing_record_list
 
     def user_logout(self, user_name):
         pass
