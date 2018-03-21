@@ -61,7 +61,10 @@ class LoginForm extends Component {
 
     const intervals = [];
     for (let i = 1; i < R.length(sortedRecords); i++) {
-      intervals.push(sortedRecords[i].start - sortedRecords[i - 1].end);
+      intervals.push({
+        start: sortedRecords[i].start,
+        end: sortedRecords[i - 1].end
+      });
     }
 
     console.info(intervals);
@@ -83,7 +86,10 @@ class LoginForm extends Component {
 
     const intervals = [];
     for (let i = 1; i < R.length(sortedRecords); i++) {
-      intervals.push(sortedRecords[i].start - sortedRecords[i - 1].end);
+      intervals.push({
+        start: sortedRecords[i].start,
+        end: sortedRecords[i - 1].end
+      });
     }
 
     console.info(intervals);
